@@ -1,14 +1,14 @@
-# Dockerfile
-FROM python:3.9
+FROM python:3.9-slim
 
 WORKDIR /app
 
 COPY requirements.txt .
-RUN apt-get update \
- && apt-get install -y gcc default-libmysqlclient-dev pkg-config \
- && pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
+
+# collect static files
+RUN python manage.py collectstatic --noinput || true
 
 EXPOSE 8000
 
